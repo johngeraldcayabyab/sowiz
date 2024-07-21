@@ -2,6 +2,7 @@
 <html>
 <head>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser-arcade-physics.min.js"></script>
+    <link rel="stylesheet" href="index.css"/>
 </head>
 <body>
 
@@ -15,12 +16,27 @@
         create() {
             const config = {
                 key: 'idleAnimation',
-                frames: this.anims.generateFrameNumbers('mob1', {start: 0, end: 2, first: 0}),
-                frameRate: 20,
+                frames: this.anims.generateFrameNumbers('mob1', {start: 0, end: 4, first: 0}),
+                frameRate: 15,
                 repeat: -1
             };
             this.anims.create(config);
-            this.add.sprite(400, 300, 'idle').play('idleAnimation');
+            this.mob1 = this.add.sprite(300, 300, 'idle').play('idleAnimation');
+            this.input.on('pointerdown', (pointer) => {
+                this.moveSprite(pointer.x, pointer.y);
+            });
+        }
+
+        moveSprite(x, y) {
+            const sprite = this.mob1;
+            const distance = Phaser.Math.Distance.Between(sprite.x, sprite.y, x, y);
+            this.tweens.add({
+                targets: sprite,
+                x: x,
+                y: y,
+                duration: distance * 10,
+                ease: 'Linear'
+            });
         }
     }
 
